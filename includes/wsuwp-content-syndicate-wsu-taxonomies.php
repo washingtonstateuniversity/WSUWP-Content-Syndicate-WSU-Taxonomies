@@ -19,15 +19,25 @@ add_filter( 'rest_post_query', 'WSUWP\Content_Syndicate\WSU_Taxonomies\rest_post
 function append_default_attributes( $atts ) {
 	$wsu_taxonomy_atts = array(
 		'university_category_slug' => '',
+		'university_category' => '',
+		'university_category_match' => '',
+
 		'university_organization_slug' => '',
+		'university_organization' => '',
+		'university_organization_match' => '',
+
 		'university_location_slug' => '',
 		'university_location' => '',
 		'university_location_match' => '',
-		'taxonomy_match' => '',
+
 		'site_category_slug' => '',
 		'category' => '',
 		'category_match' => '',
+
 		'tag' => '',
+		'tag_match' => '',
+
+		'taxonomy_match' => '',
 	);
 
 	return $atts + $wsu_taxonomy_atts;
