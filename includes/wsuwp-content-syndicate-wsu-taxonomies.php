@@ -21,21 +21,25 @@ function get_taxonomies() {
 		'university_category' => array(
 			'filter' => 'wsuwp_university_category',
 			'taxonomy' => 'wsuwp_university_category',
+			'fallback' => 'university_category_slug',
 			'match' => 'wsu_cat_match',
 		),
 		'university_organization' => array(
 			'filter' => 'wsuwp_university_org',
 			'taxonomy' => 'wsuwp_university_org',
+			'fallback' => 'university_organization_slug',
 			'match' => 'wsu_org_match',
 		),
 		'university_location' => array(
 			'filter' => 'wsuwp_university_location',
 			'taxonomy' => 'wsuwp_university_location',
+			'fallback' => 'university_location_slug',
 			'match' => 'wsu_location_match',
 		),
 		'category' => array(
 			'filter' => 'category_name',
 			'taxonomy' => 'category',
+			'fallback' => 'site_category_slug',
 			'match' => 'category_match',
 		),
 		'tag' => array(
@@ -94,103 +98,28 @@ function append_default_attributes( $atts ) {
  * @return string
  */
 function build_taxonomy_filters( $request_url, $atts ) {
-	$university_category = false;
+	$taxonomies = get_taxonomies();
 
-	if ( ! empty( $atts['university_category'] ) ) {
-		$university_category = sanitize_terms( $atts['university_category'] );
-	} elseif ( ! empty( $atts['university_category_slug'] ) ) {
-		$university_category = sanitize_terms( $atts['university_category_slug'] );
-	}
+	foreach ( $taxonomies as $key => $taxonomy ) {
+		$terms = false;
 
-	if ( ! empty( $university_category ) ) {
-		$request_url = add_query_arg( array(
-			'filter[wsuwp_university_category]' => $university_category,
-		), $request_url );
-	}
+		if ( ! empty( $atts[ $key ] ) ) {
+			$terms = sanitize_terms( $atts[ $key ] );
+		} elseif ( isset( $taxonomy['fallback'] ) && isset( $atts[ $taxonomy['fallback'] ] ) ) {
+			$terms = sanitize_terms( $atts[ $taxonomy['fallback'] ] );
+		}
 
-	if ( ! empty( $university_category ) && isset( $atts['university_category_match'] ) && 'all' === $atts['university_category_match'] ) {
-		$request_url = add_query_arg( array(
-			'filter[wsu_cat_match]' => 'all',
-		), $request_url );
-	}
+		if ( ! empty( $terms ) ) {
+			$request_url = add_query_arg( array(
+				'filter[' . $taxonomy['filter'] . ']' => $terms,
+			), $request_url );
+		}
 
-	$university_organization = false;
-
-	if ( ! empty( $atts['university_organization'] ) ) {
-		$university_organization = sanitize_terms( $atts['university_organization'] );
-	} elseif ( ! empty( $atts['university_organization_slug'] ) ) {
-		$university_organization = sanitize_terms( $atts['university_organization_slug'] );
-	}
-
-	if ( ! empty( $university_organization ) ) {
-		$request_url = add_query_arg( array(
-			'filter[wsuwp_university_org]' => $university_organization,
-		), $request_url );
-	}
-
-	if ( ! empty( $university_organization ) && isset( $atts['university_organization_match'] ) && 'all' === $atts['university_organization_match'] ) {
-		$request_url = add_query_arg( array(
-			'filter[wsu_org_match]' => 'all',
-		), $request_url );
-	}
-
-	$university_location = false;
-
-	if ( ! empty( $atts['university_location'] ) ) {
-		$university_location = sanitize_terms( $atts['university_location'] );
-	} elseif ( ! empty( $atts['university_location_slug'] ) ) {
-		$university_location = sanitize_terms( $atts['university_location_slug'] );
-	}
-
-	if ( ! empty( $university_location ) ) {
-		$request_url = add_query_arg( array(
-			'filter[wsuwp_university_location]' => $university_location,
-		), $request_url );
-	}
-
-	if ( ! empty( $university_location ) && isset( $atts['university_location_match'] ) && 'all' === $atts['university_location_match'] ) {
-		$request_url = add_query_arg( array(
-			'filter[wsu_location_match]' => 'all',
-		), $request_url );
-	}
-
-	$category = false;
-
-	// Support the older site_category_slug attribute as well as category.
-	if ( ! empty( $atts['category'] ) ) {
-		$category = sanitize_terms( $atts['category'] );
-	} elseif ( ! empty( $atts['site_category_slug'] ) ) {
-		$category = sanitize_terms( $atts['site_category_slug'] );
-	}
-
-	if ( ! empty( $category ) ) {
-		$request_url = add_query_arg( array(
-			'filter[category_name]' => $category,
-		), $request_url );
-	}
-
-	if ( ! empty( $category ) && isset( $atts['category_match'] ) && 'all' === $atts['category_match'] ) {
-		$request_url = add_query_arg( array(
-			'filter[category_match]' => 'all',
-		), $request_url );
-	}
-
-	$tag = false;
-
-	if ( ! empty( $atts['tag'] ) ) {
-		$tag = sanitize_terms( $atts['tag'] );
-	}
-
-	if ( ! empty( $tag ) ) {
-		$request_url = add_query_arg( array(
-			'filter[tag]' => $tag,
-		), $request_url );
-	}
-
-	if ( ! empty( $tag ) && isset( $atts['tag_match'] ) && 'all' === $atts['tag_match'] ) {
-		$request_url = add_query_arg( array(
-			'filter[tag_match]' => 'all',
-		), $request_url );
+		if ( ! empty( $terms ) && isset( $atts[ $taxonomy['match'] ] ) && 'all' === $atts[ $taxonomy['match'] ] ) {
+			$request_url = add_query_arg( array(
+				'filter[' . $taxonomy['match'] . ']' => 'all',
+			), $request_url );
+		}
 	}
 
 	if ( isset( $atts['taxonomy_match'] ) && 'any' === $atts['taxonomy_match'] ) {
