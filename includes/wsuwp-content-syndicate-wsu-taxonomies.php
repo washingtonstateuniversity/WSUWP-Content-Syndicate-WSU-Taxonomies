@@ -232,35 +232,31 @@ function rest_post_query( $args ) {
 			'filter' => 'wsuwp_university_category',
 			'taxonomy' => 'wsuwp_university_category',
 			'match' => 'wsu_cat_match',
-			'query' => array(),
 		),
 		'university_organization' => array(
 			'filter' => 'wsuwp_university_org',
 			'taxonomy' => 'wsuwp_university_org',
 			'match' => 'wsu_org_match',
-			'query' => array(),
 		),
 		'university_location' => array(
 			'filter' => 'wsuwp_university_location',
 			'taxonomy' => 'wsuwp_university_location',
 			'match' => 'wsu_location_match',
-			'query' => array(),
 		),
 		'category' => array(
 			'filter' => 'category_name',
 			'taxonomy' => 'category',
 			'match' => 'category_match',
-			'query' => array(),
 		),
 		'tag' => array(
 			'filter' => 'tag',
 			'taxonomy' => 'tag',
 			'match' => 'tag_match',
-			'query' => array(),
 		),
 	);
 
 	foreach ( $taxonomies as $key => $taxonomy ) {
+		$taxonomies[ $key ]['query'] = array();
 		if ( isset( $args[ $taxonomy['filter'] ] ) && ! empty( $args[ $taxonomy['filter'] ] ) ) {
 			$terms = explode( ',', $args[ $taxonomy['filter'] ] );
 
