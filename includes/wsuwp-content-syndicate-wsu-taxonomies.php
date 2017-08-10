@@ -17,20 +17,20 @@ add_filter( 'rest_post_query', 'WSUWP\Content_Syndicate\WSU_Taxonomies\rest_post
  * @return array Modified list of default shortcode attributes.
  */
 function append_default_attributes( $atts ) {
-	$wsu_taxonomy_atts = array(
-		'university_category_slug' => '',
+	$taxonomy_atts = array(
+		'university_category_slug' => '', // Deprecated, fallback attribute.
 		'university_category' => '',
 		'university_category_match' => '',
 
-		'university_organization_slug' => '',
+		'university_organization_slug' => '', // Deprecated, fallback attribute.
 		'university_organization' => '',
 		'university_organization_match' => '',
 
-		'university_location_slug' => '',
+		'university_location_slug' => '', // Deprecated, fallback attribute.
 		'university_location' => '',
 		'university_location_match' => '',
 
-		'site_category_slug' => '',
+		'site_category_slug' => '', // Deprecated, fallback attribute.
 		'category' => '',
 		'category_match' => '',
 
@@ -40,7 +40,7 @@ function append_default_attributes( $atts ) {
 		'taxonomy_match' => '',
 	);
 
-	return $atts + $wsu_taxonomy_atts;
+	return $atts + $taxonomy_atts;
 }
 
 /**
