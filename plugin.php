@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WSUWP Content Syndicate - WSU Taxonomies
-Version: 0.0.1
+Version: 0.0.2
 Description: Unique rules for WSUWP Content Syndicate and WSU taxonomies.
 Author: washingtonstateuniversity
 Author URI: https://web.wsu.edu/
