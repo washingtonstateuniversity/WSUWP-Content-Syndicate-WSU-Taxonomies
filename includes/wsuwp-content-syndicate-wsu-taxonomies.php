@@ -174,11 +174,10 @@ function rest_query_vars( $vars ) {
  * @return array
  */
 function query_vars( $vars ) {
-	array_push( $vars, 'category_match' );
-	array_push( $vars, 'wsu_cat_match' );
-	array_push( $vars, 'wsu_org_match' );
-	array_push( $vars, 'wsu_location_match' );
-	array_push( $vars, 'tag_match' );
+	foreach ( get_taxonomies() as $taxonomy ) {
+		array_push( $vars, $taxonomy['match'] );
+	}
+
 	array_push( $vars, 'taxonomy_match' );
 
 	return $vars;
