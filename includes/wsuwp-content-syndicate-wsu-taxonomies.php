@@ -114,6 +114,12 @@ function build_taxonomy_filters( $request_url, $atts ) {
 		), $request_url );
 	}
 
+	if ( isset( $atts['taxonomy_match'] ) && 'all' === $atts['taxonomy_match'] ) {
+		$request_url = add_query_arg( array(
+			'filter[taxonomy_match]' => 'all',
+		), $request_url );
+	}
+
 	return $request_url;
 }
 
