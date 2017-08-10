@@ -255,9 +255,9 @@ function rest_post_query( $args ) {
 			$terms = explode( ',', $args[ $taxonomy['filter'] ] );
 
 			if ( 2 <= count( $terms ) && isset( $args[ $taxonomy['match'] ] ) && 'all' === $args[ $taxonomy['match'] ] ) {
-				$taxonomies[ $key ]['query']['relation'] = 'OR';
-			} elseif ( 2 <= count( $terms ) ) {
 				$taxonomies[ $key ]['query']['relation'] = 'AND';
+			} elseif ( 2 <= count( $terms ) ) {
+				$taxonomies[ $key ]['query']['relation'] = 'OR';
 			}
 
 			foreach ( $terms as $term ) {
