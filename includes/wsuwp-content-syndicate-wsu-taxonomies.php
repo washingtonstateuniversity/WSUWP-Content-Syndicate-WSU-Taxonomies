@@ -29,6 +29,12 @@ function build_taxonomy_filters( $request_url, $atts ) {
 		), $request_url );
 	}
 
+	if ( ! empty( $university_category ) && isset( $atts['university_category_match'] ) && 'all' === $atts['university_category_match'] ) {
+		$request_url = add_query_arg( array(
+			'filter[university_category_match]' => 'all',
+		), $request_url );
+	}
+
 	$university_organization = false;
 
 	if ( ! empty( $atts['university_organization'] ) ) {
@@ -43,6 +49,12 @@ function build_taxonomy_filters( $request_url, $atts ) {
 		), $request_url );
 	}
 
+	if ( ! empty( $university_organization ) && isset( $atts['university_organization_match'] ) && 'all' === $atts['university_organization_match'] ) {
+		$request_url = add_query_arg( array(
+			'filter[university_organization_match]' => 'all',
+		), $request_url );
+	}
+
 	$university_location = false;
 
 	if ( ! empty( $atts['university_location'] ) ) {
@@ -54,6 +66,12 @@ function build_taxonomy_filters( $request_url, $atts ) {
 	if ( ! empty( $university_location ) ) {
 		$request_url = add_query_arg( array(
 			'filter[wsuwp_university_location]' => $university_location,
+		), $request_url );
+	}
+
+	if ( ! empty( $university_location ) && isset( $atts['university_location_match'] ) && 'all' === $atts['university_location_match'] ) {
+		$request_url = add_query_arg( array(
+			'filter[university_location_match]' => 'all',
 		), $request_url );
 	}
 
@@ -72,10 +90,27 @@ function build_taxonomy_filters( $request_url, $atts ) {
 		), $request_url );
 	}
 
+	if ( ! empty( $category ) && isset( $atts['category_match'] ) && 'all' === $atts['category_match'] ) {
+		$request_url = add_query_arg( array(
+			'filter[category_match]' => 'all',
+		), $request_url );
+	}
+
+	$tag = false;
+
 	if ( ! empty( $atts['tag'] ) ) {
 		$tag = sanitize_terms( $atts['tag'] );
+	}
+
+	if ( ! empty( $tag ) ) {
 		$request_url = add_query_arg( array(
 			'filter[tag]' => $tag,
+		), $request_url );
+	}
+
+	if ( ! empty( $tag ) && isset( $atts['tag_match'] ) && 'all' === $atts['tag_match'] ) {
+		$request_url = add_query_arg( array(
+			'filter[tag_match]' => 'all',
 		), $request_url );
 	}
 
