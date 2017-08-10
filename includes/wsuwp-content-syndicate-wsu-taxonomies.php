@@ -9,6 +9,46 @@ add_filter( 'query_vars', 'WSUWP\Content_Syndicate\WSU_Taxonomies\query_vars' );
 add_filter( 'rest_post_query', 'WSUWP\Content_Syndicate\WSU_Taxonomies\rest_post_query', 11 );
 
 /**
+ * Provide a list of taxonomies and information needed with each
+ * to apply alongside WSUWP Content Syndicate.
+ *
+ * @since 0.0.1
+ *
+ * @return array
+ */
+function get_taxonomies() {
+	$taxonomies = array(
+		'university_category' => array(
+			'filter' => 'wsuwp_university_category',
+			'taxonomy' => 'wsuwp_university_category',
+			'match' => 'wsu_cat_match',
+		),
+		'university_organization' => array(
+			'filter' => 'wsuwp_university_org',
+			'taxonomy' => 'wsuwp_university_org',
+			'match' => 'wsu_org_match',
+		),
+		'university_location' => array(
+			'filter' => 'wsuwp_university_location',
+			'taxonomy' => 'wsuwp_university_location',
+			'match' => 'wsu_location_match',
+		),
+		'category' => array(
+			'filter' => 'category_name',
+			'taxonomy' => 'category',
+			'match' => 'category_match',
+		),
+		'tag' => array(
+			'filter' => 'tag',
+			'taxonomy' => 'tag',
+			'match' => 'tag_match',
+		),
+	);
+
+	return $taxonomies;
+}
+
+/**
  * Append a list of default attributes to account for as part of this
  * taxonomy extension.
  *
@@ -215,7 +255,6 @@ function query_vars( $vars ) {
 	return $vars;
 }
 
-
 /**
  * Build a taxonomy query from taxonomy terms passed via filter parameters
  * in the REST API request.
@@ -227,33 +266,7 @@ function query_vars( $vars ) {
  * @return array
  */
 function rest_post_query( $args ) {
-	$taxonomies = array(
-		'university_category' => array(
-			'filter' => 'wsuwp_university_category',
-			'taxonomy' => 'wsuwp_university_category',
-			'match' => 'wsu_cat_match',
-		),
-		'university_organization' => array(
-			'filter' => 'wsuwp_university_org',
-			'taxonomy' => 'wsuwp_university_org',
-			'match' => 'wsu_org_match',
-		),
-		'university_location' => array(
-			'filter' => 'wsuwp_university_location',
-			'taxonomy' => 'wsuwp_university_location',
-			'match' => 'wsu_location_match',
-		),
-		'category' => array(
-			'filter' => 'category_name',
-			'taxonomy' => 'category',
-			'match' => 'category_match',
-		),
-		'tag' => array(
-			'filter' => 'tag',
-			'taxonomy' => 'tag',
-			'match' => 'tag_match',
-		),
-	);
+	$taxonomies = get_taxonomies();
 
 	foreach ( $taxonomies as $key => $taxonomy ) {
 		$taxonomies[ $key ]['query'] = array();
