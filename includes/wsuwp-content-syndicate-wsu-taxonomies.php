@@ -3,7 +3,7 @@
 namespace WSUWP\Content_Syndicate\WSU_Taxonomies;
 
 add_filter( 'wsuwp_content_syndicate_default_atts', 'WSUWP\Content_Syndicate\WSU_Taxonomies\append_default_attributes' );
-add_filter( 'wsuwp_content_syndicate_json_taxonomy_filters', 'WSUWP\Content_Syndicate\WSU_Taxonomies\build_taxonomy_filters', 10, 2 );
+add_filter( 'wsuwp_content_syndicate_taxonomy_filters', 'WSUWP\Content_Syndicate\WSU_Taxonomies\build_taxonomy_filters', 10, 2 );
 add_action( 'rest_query_vars', 'WSUWP\Content_Syndicate\WSU_Taxonomies\rest_query_vars' );
 add_filter( 'query_vars', 'WSUWP\Content_Syndicate\WSU_Taxonomies\query_vars' );
 add_filter( 'rest_post_query', 'WSUWP\Content_Syndicate\WSU_Taxonomies\rest_post_query', 11 );
