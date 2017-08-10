@@ -44,7 +44,7 @@ function get_taxonomies() {
 		),
 		'tag' => array(
 			'filter' => 'tag',
-			'taxonomy' => 'tag',
+			'taxonomy' => 'post_tag',
 			'match' => 'tag_match',
 		),
 	);
