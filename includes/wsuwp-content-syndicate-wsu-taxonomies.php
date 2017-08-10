@@ -6,6 +6,7 @@ add_filter( 'wsuwp_content_syndicate_default_atts', 'WSUWP\Content_Syndicate\WSU
 add_filter( 'wsuwp_content_syndicate_json_taxonomy_filters', 'WSUWP\Content_Syndicate\WSU_Taxonomies\build_taxonomy_filters', 10, 2 );
 add_action( 'rest_query_vars', 'WSUWP\Content_Syndicate\WSU_Taxonomies\rest_query_vars' );
 add_filter( 'query_vars', 'WSUWP\Content_Syndicate\WSU_Taxonomies\query_vars' );
+add_filter( 'rest_post_query', 'WSUWP\Content_Syndicate\WSU_Taxonomies\rest_post_query', 11 );
 
 /**
  * Append a list of default attributes to account for as part of this
@@ -202,4 +203,100 @@ function query_vars( $vars ) {
 	array_push( $vars, 'taxonomy_match' );
 
 	return $vars;
+}
+
+
+/**
+ * Build a taxonomy query from taxonomy terms passed via filter parameters
+ * in the REST API request.
+ *
+ * @since 0.0.1
+ *
+ * @param array $args
+ *
+ * @return array
+ */
+function rest_post_query( $args ) {
+	$taxonomies = array(
+		'university_category' => array(
+			'filter' => 'wsuwp_university_category',
+			'taxonomy' => 'wsuwp_university_category',
+			'match' => 'wsu_cat_match',
+			'query' => array(),
+		),
+		'university_organization' => array(
+			'filter' => 'wsuwp_university_org',
+			'taxonomy' => 'wsuwp_university_org',
+			'match' => 'wsu_org_match',
+			'query' => array(),
+		),
+		'university_location' => array(
+			'filter' => 'wsuwp_university_location',
+			'taxonomy' => 'wsuwp_university_location',
+			'match' => 'wsu_location_match',
+			'query' => array(),
+		),
+		'category' => array(
+			'filter' => 'category_name',
+			'taxonomy' => 'category',
+			'match' => 'category_match',
+			'query' => array(),
+		),
+		'tag' => array(
+			'filter' => 'tag',
+			'taxonomy' => 'tag',
+			'match' => 'tag_match',
+			'query' => array(),
+		),
+	);
+
+	foreach ( $taxonomies as $key => $taxonomy ) {
+		if ( isset( $args[ $taxonomy['filter'] ] ) && ! empty( $args[ $taxonomy['filter'] ] ) ) {
+			$terms = explode( ',', $args[ $taxonomy['filter'] ] );
+
+			if ( 2 <= count( $terms ) && isset( $args[ $taxonomy['match'] ] ) && 'all' === $args[ $taxonomy['match'] ] ) {
+				$taxonomies[ $key ]['query']['relation'] = 'OR';
+			} elseif ( 2 <= count( $terms ) ) {
+				$taxonomies[ $key ]['query']['relation'] = 'AND';
+			}
+
+			foreach ( $terms as $term ) {
+				$taxonomies[ $key ]['query'][] = array(
+					'taxonomy' => $taxonomy['taxonomy'],
+					'field' => 'slug',
+					'terms' => $term,
+				);
+			}
+		}
+	}
+
+	$tax_query = array(
+		'relation' => 'AND',
+	);
+
+	$queries = 0;
+	foreach ( $taxonomies as $key => $taxonomy ) {
+		unset( $args[ $taxonomy['filter'] ] );
+
+		if ( empty( $taxonomy['query'] ) ) {
+			continue;
+		}
+
+		$tax_query[] = $taxonomy['query'];
+		$queries++;
+	}
+
+	if ( isset( $args['taxonomy_match'] ) && 'any' === $args['taxonomy_match'] ) {
+		$tax_query['relation'] = 'OR';
+	}
+
+	if ( 1 >= $queries ) {
+		unset( $tax_query['relation'] );
+	}
+
+	if ( ! empty( $tax_query ) ) {
+		$args['tax_query'] = $tax_query;
+	}
+
+	return $args;
 }
