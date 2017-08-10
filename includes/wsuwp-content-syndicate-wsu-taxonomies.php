@@ -31,7 +31,7 @@ function build_taxonomy_filters( $request_url, $atts ) {
 
 	if ( ! empty( $university_category ) && isset( $atts['university_category_match'] ) && 'all' === $atts['university_category_match'] ) {
 		$request_url = add_query_arg( array(
-			'filter[university_category_match]' => 'all',
+			'filter[wsu_cat_match]' => 'all',
 		), $request_url );
 	}
 
@@ -51,7 +51,7 @@ function build_taxonomy_filters( $request_url, $atts ) {
 
 	if ( ! empty( $university_organization ) && isset( $atts['university_organization_match'] ) && 'all' === $atts['university_organization_match'] ) {
 		$request_url = add_query_arg( array(
-			'filter[university_organization_match]' => 'all',
+			'filter[wsu_org_match]' => 'all',
 		), $request_url );
 	}
 
@@ -71,7 +71,7 @@ function build_taxonomy_filters( $request_url, $atts ) {
 
 	if ( ! empty( $university_location ) && isset( $atts['university_location_match'] ) && 'all' === $atts['university_location_match'] ) {
 		$request_url = add_query_arg( array(
-			'filter[university_location_match]' => 'all',
+			'filter[wsu_location_match]' => 'all',
 		), $request_url );
 	}
 
