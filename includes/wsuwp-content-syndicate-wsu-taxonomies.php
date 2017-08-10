@@ -4,6 +4,7 @@ namespace WSUWP\Content_Syndicate\WSU_Taxonomies;
 
 add_filter( 'wsuwp_content_syndicate_default_atts', 'WSUWP\Content_Syndicate\WSU_Taxonomies\append_default_attributes' );
 add_filter( 'wsuwp_content_syndicate_json_taxonomy_filters', 'WSUWP\Content_Syndicate\WSU_Taxonomies\build_taxonomy_filters', 10, 2 );
+add_action( 'rest_query_vars', 'WSUWP\Content_Syndicate\WSU_Taxonomies\rest_query_vars' );
 
 /**
  * Append a list of default attributes to account for as part of this
@@ -164,4 +165,18 @@ function sanitize_terms( $terms ) {
 	$sanitize_term_array = array_map( 'sanitize_key', $term_array );
 	$imploded_terms = implode( ',', $sanitize_term_array );
 	return $imploded_terms;
+}
+
+/**
+ * Make the `tax_query` argument available to the REST API request.
+ *
+ * @since 0.0.1
+ *
+ * @param array $vars
+ *
+ * @return array
+ */
+function rest_query_vars( $vars ) {
+	array_push( $vars, 'tax_query' );
+	return $vars;
 }
