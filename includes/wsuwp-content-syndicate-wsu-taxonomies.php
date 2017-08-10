@@ -3,7 +3,7 @@
 namespace WSUWP\Content_Syndicate\WSU_Taxonomies;
 
 add_filter( 'wsuwp_content_syndicate_default_atts', 'WSUWP\Content_Syndicate\WSU_Taxonomies\append_default_attributes' );
-add_filter( 'wsuwp_content_syndicate_json_taxonomy_filters', 'WSUWP\Content_Syndicate\WSU_Taxonomies\build_taxonomy_filters', 10 );
+add_filter( 'wsuwp_content_syndicate_json_taxonomy_filters', 'WSUWP\Content_Syndicate\WSU_Taxonomies\build_taxonomy_filters', 10, 2 );
 
 /**
  * Append a list of default attributes to account for as part of this
