@@ -5,6 +5,7 @@ namespace WSUWP\Content_Syndicate\WSU_Taxonomies;
 add_filter( 'wsuwp_content_syndicate_default_atts', 'WSUWP\Content_Syndicate\WSU_Taxonomies\append_default_attributes' );
 add_filter( 'wsuwp_content_syndicate_json_taxonomy_filters', 'WSUWP\Content_Syndicate\WSU_Taxonomies\build_taxonomy_filters', 10, 2 );
 add_action( 'rest_query_vars', 'WSUWP\Content_Syndicate\WSU_Taxonomies\rest_query_vars' );
+add_filter( 'query_vars', 'WSUWP\Content_Syndicate\WSU_Taxonomies\query_vars' );
 
 /**
  * Append a list of default attributes to account for as part of this
@@ -178,5 +179,27 @@ function sanitize_terms( $terms ) {
  */
 function rest_query_vars( $vars ) {
 	array_push( $vars, 'tax_query' );
+	return $vars;
+}
+
+
+/**
+ * Filter the query vars that the plugin expects to be available through the
+ * the `filter` query argument attached to REST request URLs.
+ *
+ * @since 0.0.1
+ *
+ * @param array $vars
+ *
+ * @return array
+ */
+function query_vars( $vars ) {
+	array_push( $vars, 'category_match' );
+	array_push( $vars, 'wsu_cat_match' );
+	array_push( $vars, 'wsu_org_match' );
+	array_push( $vars, 'wsu_location_match' );
+	array_push( $vars, 'tag_match' );
+	array_push( $vars, 'taxonomy_match' );
+
 	return $vars;
 }
